@@ -1,0 +1,102 @@
+<!-- index.html — Lifestyle Dashboard with API integration -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lifestyle Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌿 Lifestyle Dashboard</h1>
+
+  <div class="card" id="quote-card">
+    <div class="section-title">🧠 Daily Quote</div>
+    <p id="quote">Loading...</p>
+  </div>
+
+  <div class="card" id="recipe-card">
+    <div class="section-title">🥗 Recipe of the Day</div>
+    <div id="recipe">
+      Loading...
+    </div>
+  </div>
+
+  <div class="card" id="fitness-card">
+    <div class="section-title">💪 Fitness Tip</div>
+    <p id="fitness-tip">Loading...</p>
+  </div>
+
+  <script>
+    // Load Quote
+    fetch("http://localhost:5001/api/quote")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("quote").textContent = data.quote;
+      })
+      .catch(err => {
+        document.getElementById("quote").textContent = "Failed to load quote.";
+      });
+
+    // Load Recipe
+    fetch("http://localhost:5002/api/recipe")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("recipe").innerHTML = `
+          <p><strong>${data.title}</strong></p>
+          <img src="${data.image}" alt="${data.title}" />
+          <p>⏱ Ready in ${data.time} minutes</p>
+        `;
+      })
+      .catch(err => {
+        document.getElementById("recipe").textContent = "Failed to load recipe.";
+      });
+
+    // Load Fitness Tip
+    fetch("http://localhost:5003/api/fitness")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("fitness-tip").textContent = data.tip;
+      })
+      .catch(err => {
+        document.getElementById("fitness-tip").textContent = "Failed to load tip.";
+      });
+  </script>
+
+</body>
+</html>
